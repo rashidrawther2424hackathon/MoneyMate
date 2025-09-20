@@ -1,0 +1,47 @@
+Backend: Project Layout (TypeScript)
+backend/
+├─ src/
+│  ├─ index.ts            # server entry
+│  ├─ routes/
+│  ├─ controllers/
+│  ├─ services/
+│  │   ├─ nlpService.ts
+│  │   ├─ savingsService.ts
+│  │   ├─ taxService.ts
+│  │   └─ investmentService.ts
+│  ├─ db/
+│  └─ utils/
+├─ tests/
+├─ package.json
+Key packages: express, pg, jsonwebtoken, axios (for NLP provider), zod (validation), dotenv.
+________________________________________
+Sample Backend: Express Chat Endpoint
+// src/controllers/chatController.ts
+import { Request, Response } from 'express';
+import { nlpService } from '../services/nlpService';
+
+export async function chat(req: Request, res: Response) {
+  const userId = req.user.id;
+  const { message, context } = req.body;
+
+  // 1. Save minimal chat entry (or do after response)
+  // 2. Call NLP/LLM with prompt template
+  const reply = await nlpService.generateReply({ userId, message, context });
+
+  res.json({ reply });
+}
+nlpService.generateReply wraps prompt engineering, safety filters, and tools like calculators.
+frontend/
+├─ src/
+│  ├─ App.tsx
+│  ├─ pages/
+│  │   ├─ Onboarding.tsx
+│  │   ├─ Chat.tsx
+│  │   └─ Dashboard.tsx   
+│  ├─ components/
+│  │   ├─ ChatWindow.tsx
+│  │   ├─ MessageBubble.tsx
+│  │   └─ RiskQuiz.tsx
+│  ├─ hooks/
+│  └─ services/
+
